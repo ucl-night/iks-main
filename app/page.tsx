@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 const exercises = [
   {
     id: "breathing-1",
@@ -24,22 +22,24 @@ export default function Home() {
         session.
       </p>
 
-      {exercises.map((exercise) => (
-        <article key={exercise.id} className="exercise-card">
-          <h2>{exercise.title}</h2>
-          <p style={{ marginTop: "0.5rem", color: "#475569" }}>
-            {exercise.description}
-          </p>
-          <Link
-            href={`/practice?video=${exercise.youtubeId}&title=${encodeURIComponent(
-              exercise.title,
-            )}`}
-            className="start-button"
-          >
-            Start Practice
-          </Link>
-        </article>
-      ))}
+      {exercises.map((exercise) => {
+        const query = new URLSearchParams({
+          video: exercise.youtubeId,
+          title: exercise.title,
+        }).toString();
+
+        return (
+          <article key={exercise.id} className="exercise-card">
+            <h2>{exercise.title}</h2>
+            <p style={{ marginTop: "0.5rem", color: "#475569" }}>
+              {exercise.description}
+            </p>
+            <a href={`/practice?${query}`} className="start-button">
+              Start Practice
+            </a>
+          </article>
+        );
+      })}
     </main>
   );
 }

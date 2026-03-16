@@ -3,15 +3,18 @@ import Link from "next/link";
 const fallbackVideoId = "SEfs5TJZ6Nk";
 
 type PracticePageProps = {
-  searchParams: Promise<{ video?: string; title?: string }>;
+  searchParams: { video?: string; title?: string };
 };
 
-export default async function PracticePage({ searchParams }: PracticePageProps) {
-  const params = await searchParams;
-  const videoId = /^[a-zA-Z0-9_-]{11}$/.test(params.video ?? "")
-    ? (params.video as string)
+function getSafeVideoId(videoId: string | undefined) {
+  return videoId && /^[a-zA-Z0-9_-]{11}$/.test(videoId)
+    ? videoId
     : fallbackVideoId;
-  const title = params.title || "Guided Exercise";
+}
+
+export default function PracticePage({ searchParams }: PracticePageProps) {
+  const videoId = getSafeVideoId(searchParams.video);
+  const title = searchParams.title || "Guided Exercise";
 
   return (
     <main>
